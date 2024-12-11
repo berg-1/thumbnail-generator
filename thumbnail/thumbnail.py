@@ -187,6 +187,9 @@ def create_thumbnail(root_path, filename, config: Config):
         draw = ImageDraw.Draw(img)
         draw.text((fig.padding, int(fig.padding * 0.8)), "\n".join(metadata), fig.color.text, f1,
                   spacing=fig.lineSpacing, stroke_fill=fig.color.outline, stroke_width=int(fig.fontSize / 16))
+        print(config.shadow_iter)
+        print(config.shadow_bg)
+        print(config.shadow)
         shadow, position = make_shadow(fig.width, fig.height, config.mode, config.shadow_iter,
                                        fig.shadowBorder, fig.shadowOffset, fig.color.shadowBg,
                                        fig.color.shadow)  # generate shadow for reuse

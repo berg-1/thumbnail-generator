@@ -69,32 +69,32 @@ def main():
     parser.add_argument(
         "-c1", "--text-color",
         type=str,
-        default="FBFBFDFF",
-        help="Font color for text overlays (default: FBFBFDFF)."
+        default="#FBFBFDFF",
+        help="Font color for text overlays (default: #FBFBFDFF)."
     )
     parser.add_argument(
         "-c2", "--time-color",
         type=str,
-        default="FFFFFF99",
-        help="Font color for timestamp overlays (default: FFFFFF99)."
+        default="#FFFFFF99",
+        help="Font color for timestamp overlays (default: #FFFFFF99)."
     )
     parser.add_argument(
         "-ol", "--outline",
         type=str,
-        default="00000040",
-        help="Color for thumbnail outline (default: 00000040)."
+        default="#00000040",
+        help="Color for thumbnail outline (default: #00000040)."
     )
     parser.add_argument(
         "-s", "--shadow",
         type=str,
-        default="12121266",
-        help="Back shadow color (default: 12121266)."
+        default="#12121266",
+        help="Back shadow color (default: #12121266)."
     )
     parser.add_argument(
         "-sb", "--shadow-bg",
         type=str,
-        default="2E2E2E",
-        help="Back shadow background color (default: 2E2E2E)."
+        default="#2E2E2E",
+        help="Back shadow background color (default: #2E2E2E)."
     )
     parser.add_argument(
         "-si", "--shadow-iter",

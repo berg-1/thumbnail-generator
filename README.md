@@ -56,11 +56,11 @@ python thumbnail_generator.py <video_path> [options]
 | `-b`, `--bg-color`         | `#2E2E2E`           | Background color of the grid.               |
 | `-f`, `--text-font`        | `arial.ttf`         | Font file for text overlays.                |
 | `-ft`, `--time-font`       | `fonts/Georgia.ttf` | Font file for timestamp overlays.           |
-| `-c1`, `--text-color`      | `FBFBFDFF`          | Color for text overlays.                    |
-| `-c2`, `--time-color`      | `FFFFFF99`          | Color for timestamp overlays.               |
-| `-ol`, `--outline`         | `00000040`          | Color of the thumbnail outline.             |
-| `-s`, `--shadow-color`     | `12121266`          | Color for shadow effects.                   |
-| `-sb`, `--shadow-bg-color` | `2E2E2E`            | Background color for shadow effects.        |
+| `-c1`, `--text-color`      | `#FBFBFDFF`         | Color for text overlays.                    |
+| `-c2`, `--time-color`      | `#FFFFFF99`         | Color for timestamp overlays.               |
+| `-ol`, `--outline`         | `#00000040`         | Color of the thumbnail outline.             |
+| `-s`, `--shadow-color`     | `#12121266`         | Color for shadow effects.                   |
+| `-sb`, `--shadow-bg-color` | `#2E2E2E`           | Background color for shadow effects.        |
 | `-m`, `--output-mode`      | `RGB`               | Output mode for images (e.g., RGB for JPG). |
 | `-o`, `--output`           | `None`              | Path to save the generated thumbnail grid.  |
 
@@ -84,9 +84,9 @@ python thumbnail_generator.py <video_path> [options]
    python thumbnail_generator.py "videos_folder"
    ```
 
-## 
----
+### Sample output
 
+![Big Buck Bunny](sample/Big Buck Bunny_sunflower_1080p_60fps_normal.mp4.jpg)
 
 ## License
 
