@@ -86,7 +86,7 @@ python thumbnail_generator.py <video_path> [options]
 
 ### Sample output
 
-![Big Buck Bunny](sample/Big Buck Bunny_sunflower_1080p_60fps_normal.mp4.jpg)
+![sample](https://github.com/berg-1/thumbnail-generator/blob/105ed6e2a7f78776300d92cdf97bbdd5541c465a/sample/Big%20Buck%20Bunny_sunflower_1080p_60fps_normal.mp4.jpg)
 
 ## License
 
