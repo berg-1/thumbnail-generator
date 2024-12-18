@@ -5,7 +5,7 @@ class Config:
     def __init__(self, output_path, rows=3, cols=3, mode="RGB",
                  font_text="arial.ttf", font_timestamp="arial.ttf", bg_color="#2E2E2E", text_color="#FBFBFDFF",
                  time_color="#FFFFFF99", outline="#00000040",
-                 shadow="#12121266", shadow_bg="#12121266", shadow_iter=10):
+                 shadow="#12121266", shadow_bg="#2E2E2E", shadow_iter=10):
         self.output = output_path
         self.rows = rows
         self.cols = cols
