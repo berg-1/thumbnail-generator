@@ -85,6 +85,12 @@ def main():
         help="Color for thumbnail outline (default: #00000040)."
     )
     parser.add_argument(
+        "-tp", "--time-pos",
+        type=str,
+        default="top-right",
+        help="Time stamp position (default: top-right)."
+    )
+    parser.add_argument(
         "-s", "--shadow",
         type=str,
         default="#12121266",
@@ -118,7 +124,7 @@ def main():
     args = parser.parse_args()
     config = Config(args.output, rows=args.rows, cols=args.cols, bg_color=args.bg_color, font_text=args.text_font,
                     shadow=args.shadow, shadow_bg=args.shadow_bg, shadow_iter=args.shadow_iter,
-                    font_timestamp=args.time_font, mode=args.output_mode)
+                    font_timestamp=args.time_font, time_position=args.time_pos, mode=args.output_mode)
     create_thumbnails(
         video_path=args.video,
         config=config

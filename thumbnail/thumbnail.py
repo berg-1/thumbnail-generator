@@ -9,8 +9,10 @@ import traceback
 
 import av
 from PIL import Image, ImageFont, ImageDraw, ImageOps, ImageFilter
+from PIL.Image import Resampling
+from PIL.ImageFont import FreeTypeFont
 
-from .config import OutputFigure, nearest_10000_multiple, Config
+from .config import OutputFigure, nearest_10000_multiple, Config, TimePosition
 
 
 def get_time_display(timestamp):
@@ -79,12 +81,31 @@ def make_shadow(width, height, color_mode, iterations=10, border=8, offset=(10, 
     return shadow, (img_left, img_top)
 
 
-def get_frame_thumbnail(new_img, timestamp, font, shadow, position, fig):
+def clac_time_position(time_pos: TimePosition, img_w, img_h, text_w, text_h, padding):
+    """calculate timestamp coordination"""
+    if time_pos == TimePosition.TOP_RIGHT:
+        coords = (img_w - text_w - padding / 2, padding / 2)
+    elif time_pos == TimePosition.CENTER:
+        coords = ((img_w - text_w) / 2, (img_h - text_h) / 2)
+    elif time_pos == TimePosition.BOTTOM_RIGHT:
+        coords = (img_w - text_w - padding / 2, img_h - text_h - padding / 2)
+    elif time_pos == TimePosition.TOP_LEFT:
+        coords = (padding / 2, padding / 2)
+    elif time_pos == TimePosition.BOTTOM_LEFT:
+        coords = (padding / 2, img_h - text_h - padding / 2)
+    else:
+        raise ValueError(f"Invalid timestamp_position: {time_pos}")
+    return coords
+
+
+def get_frame_thumbnail(new_img: Image, timestamp: int, font: FreeTypeFont, shadow: Image, position: tuple[int, int],
+                        fig: OutputFigure, time_position: TimePosition = TimePosition.TOP_RIGHT):
     """
     get frame thumbnail
     :param fig: configuration
     :param new_img: frame
     :param timestamp: timestamp
+    :param time_position: position of timestamp
     :param font: font
     :param shadow: image shadow
     :param position: where the frame will be located
@@ -95,11 +116,13 @@ def get_frame_thumbnail(new_img, timestamp, font, shadow, position, fig):
     image_draw = ImageDraw.Draw(text_overlay)
     img_w, img_h = new_img.size
     # Calculate the width and height of the timestamp text
-    _, _, w, h = image_draw.textbbox((0, 0), get_time_display(timestamp), font)
-    # Position the timestamp in the upper right corner (subtracting width from image width for right alignment)
-    timestamp_position = (img_w - w - fig.padding / 2, fig.padding / 2)
+    time_display = get_time_display(timestamp)
+    _, _, w, h = image_draw.textbbox((0, 0), time_display, font)
+
+    # Calculate timestamp position
+    coords = clac_time_position(time_position, img_w, img_h, w, h, fig.padding)
     # Draw the timestamp text at the specified position
-    image_draw.text(timestamp_position, get_time_display(timestamp),
+    image_draw.text(coords, time_display,
                     fill=fig.color.timestamp, font=font, stroke_width=int(fig.fontSize / 16),
                     stroke_fill=fig.color.outline)  # 时间戳位置
     new_img = Image.alpha_composite(new_img, text_overlay)
@@ -128,8 +151,9 @@ def create_thumbnail(root_path, filename, config: Config):
     if config.mode == "RGB":
         pic_name = f"{filename}.jpg"
     else:
+        config.mode = "RGBA"
         pic_name = f"{filename}.png"
-    if config.output is None or not os.path.isdir(config.output):
+    if not config.output or not os.path.isdir(config.output):
         pic_path = os.path.join(root_path, pic_name)
     else:
         pic_path = os.path.join(config.output, pic_name)
@@ -168,7 +192,7 @@ def create_thumbnail(root_path, filename, config: Config):
                     f"Size: {get_file_size(container.size)} ({container.size:,} bytes)",
                     f"Resolution: {meta_vid.width}x{meta_vid.height}",
                     f"Duration: {get_time_display(container.duration // 1000000)}",
-                    f"Filename: {meta_vid.name.upper()} "
+                    f"Video: {meta_vid.name.upper()} "
                     f"({container.streams.video[0].codec.long_name}) :: {bit_rate:,}kbps"
                     f", {float(frame_rate):.2f} fps",
                     f"Audio: {meta_aud.name.upper()} :: {meta_aud.sample_rate // 1000:,}kHz, "
@@ -194,10 +218,11 @@ def create_thumbnail(root_path, filename, config: Config):
             y = idx // fig.cols
             x = idx % fig.cols
             new_img, timestamp = snippet
-            new_img = new_img.resize((fig.width, fig.height), resample=Image.BILINEAR)
+            new_img = new_img.resize((fig.width, fig.height), resample=Resampling.BILINEAR)
             x = fig.padding + (fig.padding + fig.width) * x
             y = image_start_y + (fig.padding + fig.height) * y
-            img.paste(get_frame_thumbnail(new_img, timestamp, f2, shadow, position, fig), box=(x, y))
+            img.paste(get_frame_thumbnail(new_img, timestamp, f2, shadow, position, fig, config.time_position),
+                      box=(x, y))
 
         img.save(pic_path)
 

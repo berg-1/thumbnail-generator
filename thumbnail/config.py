@@ -1,10 +1,28 @@
 #! python3
 # -*- coding:utf-8 -*-
 # @Author  : berg-1
+from enum import Enum
+
+
+class TimePosition(Enum):
+    TOP_RIGHT = "top-right"
+    CENTER = "center"
+    BOTTOM_RIGHT = "bottom-right"
+    TOP_LEFT = "top-left"
+    BOTTOM_LEFT = "bottom-left"
+
+    @classmethod
+    def _missing_(cls, value):
+        for member in cls:
+            if member.value.lower() == str(value).lower():
+                return member
+        return cls.TOP_RIGHT  # default value
+
+
 class Config:
     def __init__(self, output_path, rows=3, cols=3, mode="RGB",
                  font_text="arial.ttf", font_timestamp="arial.ttf", bg_color="#2E2E2E", text_color="#FBFBFDFF",
-                 time_color="#FFFFFF99", outline="#00000040",
+                 time_color="#FFFFFF99", outline="#00000040", time_position="top-right",
                  shadow="#12121266", shadow_bg="#2E2E2E", shadow_iter=10):
         self.output = output_path
         self.rows = rows
@@ -16,6 +34,7 @@ class Config:
         self.text_color = text_color
         self.time_color = time_color
         self.outline = outline
+        self.time_position = TimePosition(time_position)
         self.shadow = shadow
         self.shadow_bg = shadow_bg
         self.shadow_iter = shadow_iter
