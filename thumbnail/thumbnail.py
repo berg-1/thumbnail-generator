@@ -1,6 +1,7 @@
 #! python3
 # -*- coding:utf-8 -*-
 # @Author  : berg-1
+import base64
 import os
 import random
 import string
@@ -27,6 +28,16 @@ def get_random_filename(ext):
     generate random filename
     """
     return "".join([random.choice(string.ascii_lowercase) for _ in range(20)]) + ext
+
+
+def str_to_base64(s):
+    """encode str into base64"""
+    return base64.b64encode(s.encode('utf-8')).decode('utf-8')
+
+
+def base64_to_str(s):
+    """decode base64 str"""
+    return base64.b64decode(s.encode('utf-8')).decode('utf-8')
 
 
 def get_file_size(res):
@@ -158,9 +169,9 @@ def create_thumbnail(root_path, filename, config: Config):
     else:
         pic_path = os.path.join(config.output, pic_name)
     file_path = os.path.join(root_path, filename)
-    _, ext = os.path.splitext(filename)
-    random_filename = get_random_filename(ext)
-    random_filename_2 = get_random_filename(ext)
+    prefix, ext = os.path.splitext(filename)
+    random_filename = str_to_base64(prefix) + ext
+    random_filename_2 = str_to_base64(prefix) + ext
     os.rename(file_path, os.path.join(root_path, random_filename))
 
     try:
